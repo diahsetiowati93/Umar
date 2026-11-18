@@ -1,0 +1,149 @@
+<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Petualangan Pulau Angka</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#cdf1ec;--card:#fffdf4;--ink:#17324d;--mut:#4f6a82;--ok:#1f7a4f;--bad:#b83228;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b2a33;--card:#15394a;--ink:#f2f7f5;--mut:#a9c4cc}}
+:root[data-theme="dark"]{--bg:#0b2a33;--card:#15394a;--ink:#f2f7f5;--mut:#a9c4cc}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:500 17px/1.45 Fredoka,"Trebuchet MS","Comic Sans MS",sans-serif}
+.wrap{max-width:640px;margin:auto;padding:54px 14px 30px}
+h1,h2,h3{font-weight:700;line-height:1.15;margin:.3em 0}h1{font-size:31px}h2{font-size:25px}h3{font-size:18px;margin:18px 0 6px}
+.card{background:var(--card);border:3px solid var(--ink);border-radius:24px;box-shadow:0 5px 0 var(--ink);padding:16px;margin-bottom:14px}
+.c{text-align:center}.big{font-size:64px}.mut{color:var(--mut)}.star{font-size:34px}
+.btn{font:inherit;font-weight:700;color:#17324d;background:#ffc83d;border:3px solid var(--ink);border-radius:16px;box-shadow:0 4px 0 var(--ink);padding:10px 16px;cursor:pointer;margin:6px 0}
+.btn:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}.btn:disabled{cursor:default}
+.go{background:#ff8a6b;display:block;width:100%}.alt{background:#8fd3ff}
+.opt{display:block;width:100%;text-align:left;background:var(--card);color:var(--ink);margin:8px 0}
+.opt.ok{background:var(--ok);color:#fff}.opt.bad{background:var(--bad);color:#fff}
+.lnk{font:inherit;background:none;border:0;color:var(--mut);text-decoration:underline;cursor:pointer;display:block;margin:10px auto}
+input[type=text]{width:100%;font:inherit;font-size:18px;padding:10px 12px;border:3px solid var(--ink);border-radius:14px;background:var(--card);color:var(--ink);margin:8px 0}
+.chk{display:flex;gap:8px;align-items:center;margin:8px 0;text-align:left}
+.avs{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:14px 0}
+.av{font:inherit;font-weight:600;background:var(--card);color:var(--ink);border:3px solid var(--ink);border-radius:18px;padding:8px;cursor:pointer}
+.av span{display:block;font-size:42px}.av.on{background:#ffc83d;color:#17324d;box-shadow:0 4px 0 var(--ink)}
+.top{display:flex;gap:12px;align-items:center}.avb{font-size:44px}
+.isl{display:flex;align-items:center;gap:14px;width:90%;font:inherit;color:#17324d;text-align:left;border:3px solid var(--ink);border-radius:28px;box-shadow:0 5px 0 var(--ink);padding:14px;cursor:pointer}
+.i0{background:#c6f0c2;margin-right:auto}.i1{background:#cfd8ff;margin-left:auto}.i2{background:#ffd2c4;margin-right:auto}
+.isl.lock{opacity:.55;cursor:default}.ie{font-size:46px}.trail{text-align:center;letter-spacing:8px;color:var(--mut);margin:6px 0}
+.hd{display:flex;justify-content:space-between;font-weight:700;margin-bottom:6px}
+.bar,.tbar{height:12px;border:2px solid var(--ink);border-radius:9px;overflow:hidden;margin:6px 0}.bar i,.tbar i{display:block;height:100%;background:#2fa36b;transition:width .3s}.tbar i{background:#ff6b4a;transition:none}
+.q{font-size:20px;font-weight:600;margin:12px 0}.story{background:rgba(255,200,61,.22);border-radius:14px;padding:10px 12px}
+.fig{display:block;width:100%;max-width:360px;margin:8px auto;background:rgba(255,200,61,.2);border-radius:14px;color:var(--ink)}
+.chest{font-size:64px;text-align:center}.boss{display:flex;align-items:center;gap:12px;font-size:50px}.hp{flex:1}.hp i{background:#b83228}
+.fb{margin-top:12px;padding:12px;border-radius:16px;border:2px dashed var(--ink);background:rgba(255,200,61,.2)}.ex{margin:8px 0}
+.rp{border:2px solid var(--ink);border-radius:14px;padding:8px 12px;margin:6px 0;background:var(--card)}.rp.g{border-left:10px solid var(--ok)}.rp.b{border-left:10px solid var(--bad)}.rp summary{cursor:pointer}
+.mt{position:fixed;right:10px;top:calc(8px + env(safe-area-inset-top,0px));font-size:22px;width:44px;height:44px;border-radius:50%;border:3px solid var(--ink);background:var(--card);cursor:pointer;z-index:6}
+#cf{position:fixed;inset:0;pointer-events:none;z-index:5}
+.shake{animation:sk .35s}@keyframes sk{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+:focus-visible{outline:3px solid #ff6b4a;outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body>
+<div class="wrap"><div id="app"></div></div><canvas id="cf"></canvas>
+<button class="mt" aria-label="Suara" onclick="S.m=!S.m;this.textContent=S.m?'🔇':'🔊'">🔊</button>
+<script>
+const $=s=>document.querySelector(s),A=$('#app'),esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const S={av:'🤠',nm:'',tm:false,done:[0,0,0],L:{},m:0,t:0};let T,AC;
+// ===== BANK SOAL =====
+const P=[
+["Lambang bilangan dari tujuh ribu tiga ratus dua puluh lima adalah ....",["7.235","7.325","7.352","7.523"],1,"7 ribu = 7.000, 3 ratus = 300, 2 puluh = 20, dan 5. Jadi 7.325."],
+["Nilai angka 8 pada bilangan 8.642 adalah ....",["8","80","800","8.000"],3,"Angka 8 berada di tempat ribuan, jadi nilainya 8.000."],
+["Urutan bilangan berikut dari yang terkecil adalah: 4.250, 4.025, 4.502, 4.205",["4.025, 4.205, 4.250, 4.502","4.205, 4.025, 4.250, 4.502","4.502, 4.250, 4.205, 4.025","4.025, 4.250, 4.205, 4.502"],0,"Bandingkan ratusannya: 025 &lt; 205 &lt; 250 &lt; 502."],
+["Hasil dari 3.475 + 2.368 adalah ....",["5.743","5.833","5.843","5.943"],2,"3.475 + 2.368 = 5.843."],
+["Perpustakaan memiliki 5.250 buku. Sebanyak 1.375 buku dipinjam siswa. Jumlah buku yang masih ada di perpustakaan adalah ....",["3.775","3.875","3.975","4.125"],1,"Sisa buku = 5.250 − 1.375 = 3.875."],
+["Sebuah kue dipotong menjadi 8 bagian sama besar. Rina memakan 3 bagian. Pecahan kue yang dimakan Rina adalah ....",["2/6","3/8","5/8","8/3"],1,"Dimakan 3 dari 8 bagian, jadi 3/8."],
+["Pecahan yang senilai dengan 1/2 adalah ....",["2/3","2/4","3/5","3/8"],1,"Kalikan atas dan bawah dengan 2: 1/2 = 2/4."],
+["Pecahan yang nilainya paling besar adalah ....",["1/4","2/4","3/4","1/4"],2,"Penyebutnya sama (4), maka pembilang terbesar menang: 3/4."],
+["Ibu memiliki sebuah semangka. Sebanyak 2/8 bagian diberikan kepada adik dan 3/8 bagian diberikan kepada kakak. Jumlah semangka yang diberikan adalah ....",["1/8","4/8","5/8","6/8"],2,"2/8 + 3/8 = 5/8."],
+["Pecahan 6/10 jika disederhanakan menjadi ....",["2/5","3/5","4/5","5/6"],1,"Bagi atas dan bawah dengan 2: 6/10 = 3/5."],
+["Nilai yang tepat untuk mengisi kotak berikut adalah: 25 + [ ? ] = 60",["25","30","35","40"],2,"[ ? ] = 60 − 25 = 35."],
+["Nilai kotak yang tepat untuk kalimat matematika berikut adalah: [ ? ] − 125 = 275",["300","350","400","425"],2,"[ ? ] = 275 + 125 = 400."],
+["Bilangan yang tepat untuk melengkapi kalimat matematika berikut adalah: 8 × [ ? ] = 72",["7","8","9","10"],2,"[ ? ] = 72 : 8 = 9."],
+["Diketahui: 450 : [ ? ] = 50. Nilai kotak yang benar adalah ....",["5","7","8","9"],3,"[ ? ] = 450 : 50 = 9."],
+["Dika memiliki sejumlah kelereng. Setelah diberi 18 kelereng oleh temannya, jumlahnya menjadi 45. Banyak kelereng Dika semula adalah ....",["23","27","33","37"],1,"Kelereng semula = 45 − 18 = 27."],
+["Perhatikan pola bilangan berikut: 5, 10, 15, 20, ..., .... Dua bilangan berikutnya adalah ....",["21 dan 22","23 dan 25","25 dan 30","30 dan 35"],2,"Polanya bertambah 5: 20 + 5 = 25, 25 + 5 = 30."],
+["Perhatikan pola berikut: 2, 4, 8, 16, ..., .... Bilangan berikutnya adalah ....",["20 dan 24","24 dan 32","30 dan 45","32 dan 64"],3,"Polanya dikali 2: 16 × 2 = 32, 32 × 2 = 64."],
+["Perhatikan gambar. Pola 1 = 1 lingkaran, Pola 2 = 2 lingkaran, Pola 3 = 3 lingkaran. Jika pola dilanjutkan, jumlah lingkaran pada pola ke-5 adalah ....",["4","5","6","7"],1,"Setiap pola bertambah 1 lingkaran, jadi pola ke-5 punya 5 lingkaran.","dots"],
+["Perhatikan pola bilangan berikut: 100, 90, 80, 70, ..., .... Bilangan berikutnya adalah ....",["65 dan 60","60 dan 50","60 dan 40","50 dan 40"],1,"Polanya berkurang 10: 70 − 10 = 60, 60 − 10 = 50."],
+["Jumlah batang korek api pada suatu pola adalah 4, 7, 10, 13, .... Jika pola berlanjut, jumlah batang korek api pada pola ke-6 adalah ....",["16","18","19","21"],2,"Bertambah 3: 13 → 16 (pola ke-5) → 19 (pola ke-6)."]];
+const X=[
+["Bentuk panjang dari bilangan 6.482 adalah ...","6.000 + 400 + 80 + 2","6.482 = 6 ribuan + 4 ratusan + 8 puluhan + 2 satuan."],
+["Bilangan 9.075 dibaca ...","Sembilan ribu tujuh puluh lima","9.075 = 9 ribu, 0 ratus, 7 puluh, 5."],
+["Hasil dari 7.250 − 3.475 adalah ...","3.775","7.250 − 3.475 = 3.775."],
+["Pecahan yang menunjukkan 5 bagian dari 8 bagian sama besar adalah ...","5/8","5 bagian dari 8 bagian ditulis 5/8."],
+["Hasil dari 3/7 + 2/7 adalah ...","5/7","Penyebut sama, jumlahkan pembilangnya: 3 + 2 = 5, jadi 5/7."],
+["Pecahan 4/8 jika disederhanakan menjadi ...","1/2","Bagi atas dan bawah dengan 4: 4/8 = 1/2."],
+["Nilai dari kotak berikut adalah: 125 + [ ? ] = 300","175","[ ? ] = 300 − 125 = 175."],
+["Tentukan nilai kotak berikut: 720 − [ ? ] = 250","470","[ ? ] = 720 − 250 = 470."],
+["Lengkapilah pola bilangan berikut: 12, 16, 20, 24, ..., ...","28 dan 32","Bertambah 4: 24 + 4 = 28, 28 + 4 = 32."],
+["Perhatikan pola berikut: 1, 3, 6, 10, 15, ... Bilangan berikutnya adalah ...","21","Tambahannya 2, 3, 4, 5, lalu 6: 15 + 6 = 21."]];
+const B=[
+['31','Bilangan Cacah','Sebuah toko alat tulis memiliki persediaan 4.750 buku tulis. Pada hari Senin toko menerima kiriman sebanyak 2.350 buku. Kemudian, pada hari Selasa terjual 1.825 buku.',0,[
+['Berapa jumlah buku setelah menerima kiriman?','7.100',[7100],'4.750 + 2.350 = 7.100 buku'],
+['Berapa jumlah buku yang tersisa setelah penjualan?','5.275',[5275],'7.100 − 1.825 = 5.275 buku']]],
+['32','Pecahan','Ibu membuat sebuah kue dan memotongnya menjadi 12 bagian sama besar. Adi memakan 3/12 bagian, sedangkan Beni memakan 4/12 bagian.',0,[
+['Berapa bagian kue yang telah dimakan Adi dan Beni?','7/12','7/12','3/12 + 4/12 = 7/12'],
+['Berapa bagian kue yang masih tersisa?','5/12','5/12','12/12 − 7/12 = 5/12'],
+['Siapa yang memakan kue lebih banyak?','Beni',/beni/,'Beni, karena 4/12 lebih besar daripada 3/12']]],
+['33','Aljabar','Pak Guru memiliki sejumlah pensil. Setelah membeli 35 pensil lagi, jumlah seluruh pensil menjadi 120 buah.',0,[
+['Pilih kalimat matematika yang tepat menggunakan kotak (□) untuk menunjukkan jumlah pensil semula!','□ + 35 = 120',0,'Pensil semula (□) ditambah 35 menjadi 120.',['□ + 35 = 120','□ − 35 = 120','35 + 120 = □','120 + 35 = □']],
+['Berapa jumlah pensil Pak Guru sebelum membeli pensil tambahan?','85',[85],'120 − 35 = 85 pensil']]],
+['34','Pola Bilangan','Perhatikan pola bilangan berikut: 3, 6, 9, 12, 15, ....',0,[
+['Apa aturan pola bilangan tersebut?','Bertambah 3',/tambah.*3|\+3|plus3|naik3|kelipatan3/,'Setiap bilangan bertambah 3.'],
+['Tuliskan tiga bilangan berikutnya!','18, 21, 24',[18,21,24],'15 + 3 = 18, 18 + 3 = 21, 21 + 3 = 24.'],
+['Berapakah bilangan pada urutan ke-10?','30',[30],'3, 6, 9, 12, 15, 18, 21, 24, 27, 30 → urutan ke-10 adalah 30.']]],
+['35','Pola Gambar','Setiap persegi memakai 4 batang korek api, dan persegi yang bersebelahan memakai satu sisi yang sama.','sticks',[
+['Berapa batang korek api yang diperlukan pada pola ke-1, ke-2, dan ke-3?','Pola 1 = 4, Pola 2 = 7, Pola 3 = 10 batang',[4,7,10],'Pola 1 = 4 batang, pola 2 = 7 batang, pola 3 = 10 batang.'],
+['Berapa batang korek api yang diperlukan untuk membuat pola ke-5?','16 batang',[16],'4, 7, 10, 13, 16 → pola ke-5 memerlukan 16 batang.'],
+['Mengapa jumlah batang korek api tidak bertambah 4 setiap kali membuat persegi baru?','Karena setiap persegi baru berbagi satu sisi dengan persegi sebelumnya, sehingga hanya membutuhkan tambahan 3 batang korek api.',/sisi|bagi|bersama|dempet|himpit|3|tiga/,'Persegi baru berbagi satu sisi dengan persegi sebelumnya, jadi hanya perlu tambahan 3 batang.']]]];
+const I1=P.map((r,i)=>({id:''+(i+1),q:r[0],o:r[1],k:r[2],e:r[3],f:r[4]}));
+const I2=X.map(([q,a,e],i)=>({id:''+(21+i),q,a,m:a,e,h:'💎 Peti harta'}));
+const I3=B.flatMap(([n,t,s,f,st])=>st.map((r,j)=>({id:n+'abc'[j],q:r[0],a:r[1],m:r[2],e:r[3],ch:r[4],s,f,h:`🏰 Soal ${n} · ${t}`})));
+const IDS=[I1,I2,I3].map(a=>a.map(x=>x.id));
+// ===== GAMBAR SVG =====
+const FIG={dots:()=>{let s='<svg viewBox="0 0 300 70" class="fig" role="img" aria-label="Pola 1 satu lingkaran, pola 2 dua lingkaran, pola 3 tiga lingkaran">';[1,2,3].forEach((n,k)=>{const x=22+k*100;for(let j=0;j<n;j++)s+=`<circle cx="${x+j*24}" cy="26" r="9" fill="#ff6b4a" stroke="#17324d" stroke-width="2"/>`;s+=`<text x="${x-10}" y="62" font-size="14" fill="currentColor">Pola ${n}</text>`});return s+'</svg>'},
+sticks:()=>{let s='<svg viewBox="0 0 300 80" class="fig" role="img" aria-label="Pola persegi korek api: pola 1 satu persegi, pola 2 dua persegi, pola 3 tiga persegi berdempetan">';const L=(a,b,c,d)=>`<line x1="${a}" y1="${b}" x2="${c}" y2="${d}"/>`;[[1,12],[2,70],[3,160]].forEach(([n,x])=>{s+='<g stroke="#c98a3d" stroke-width="5" stroke-linecap="round">';for(let i=0;i<n;i++){const a=x+i*34;s+=L(a,12,a+34,12)+L(a,46,a+34,46)+L(a,12,a,46)}s+=L(x+n*34,12,x+n*34,46)+'</g>'+`<text x="${x}" y="70" font-size="14" fill="currentColor">Pola ${n}</text>`});return s+'</svg>'}};
+// ===== SUARA & KONFETI =====
+function snd(t){if(S.m)return;try{AC=AC||new(window.AudioContext||webkitAudioContext)();const q={ok:[[660,0],[880,.12]],bad:[[200,0],[150,.15]],win:[[523,0],[659,.12],[784,.24],[1047,.36]]}[t];q.forEach(([f,d])=>{const o=AC.createOscillator(),g=AC.createGain(),s=AC.currentTime+d;o.type=t=='bad'?'sawtooth':'triangle';o.frequency.value=f;o.connect(g);g.connect(AC.destination);g.gain.setValueAtTime(.15,s);g.gain.exponentialRampToValueAtTime(.001,s+.25);o.start(s);o.stop(s+.26)})}catch(e){}}
+function confetti(){if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;const c=$('#cf'),x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;const q=[...Array(120)].map(()=>({x:Math.random()*c.width,y:-20-Math.random()*c.height*.5,v:2+Math.random()*4,r:4+Math.random()*5,c:`hsl(${Math.random()*360},90%,60%)`,s:Math.random()*6}));let f=0;(function d(){x.clearRect(0,0,c.width,c.height);q.forEach(p=>{p.y+=p.v;p.x+=Math.sin(p.y/30+p.s);x.fillStyle=p.c;x.fillRect(p.x,p.y,p.r,p.r*1.6)});if(++f<220)requestAnimationFrame(d);else x.clearRect(0,0,c.width,c.height)})()}
+// ===== UTILITAS =====
+const N=s=>String(s).toLowerCase().replace(/\./g,'').replace(/(\d)\s+(?=\d)/g,'$1|').replace(/\s+/g,'').replace(/dan|,|;/g,'|');
+function ok(it,v){if(it.ch)return v===it.a;const t=N(v),m=it.m;if(!t)return 0;
+if(m instanceof RegExp)return m.test(t);
+if(Array.isArray(m)){let j=0;(t.match(/\d+/g)||[]).forEach(n=>{if(+n==m[j])j++});return j==m.length}
+const k=N(m);return t.includes(k)||t.replace(/\|/g,'').includes(k.replace(/\|/g,''))}
+const heart=n=>'❤️'.repeat(n)+'🖤'.repeat(3-n);
+const pct=i=>Math.round(IDS[i].filter(id=>S.L[id]&&S.L[id].ok).length/IDS[i].length*100);
+const stars=p=>p>=90?'⭐⭐⭐':p>=70?'⭐⭐':p>=40?'⭐':'🌱';
+const fbk=(msg,key,e,nx)=>`<div class="fb"><b>${msg}</b><br><button class="btn alt" onclick="this.hidden=1;this.nextElementSibling.hidden=0">📖 Lihat Kunci &amp; Pembahasan</button><div class="ex" hidden>Kunci: <b>${key}</b><br>${e}</div><button class="btn go" onclick="${nx}">Lanjut ▶</button></div>`;
+// ===== LAYAR =====
+function start(){clearInterval(T);A.innerHTML=`<div class="card c"><div class="big">🏝️</div><h1>Petualangan Pulau Angka</h1><p class="mut">Matematika kelas 4 SD. Pilih penjelajahmu!</p><div class="avs">${[['🤠','Penjelajah'],['🤖','Robot'],['👨‍🚀','Astronot'],['🐱','Kucing Pintar']].map(([e,n])=>`<button class="av ${e==S.av?'on':''}" onclick="pk('${e}')"><span>${e}</span>${n}</button>`).join('')}</div><input type="text" id="nm" placeholder="Namamu (boleh kosong)" maxlength="20" value="${esc(S.nm)}"><label class="chk"><input type="checkbox" id="tm" ${S.tm?'checked':''}> Pakai timer 30 detik di Pulau 1</label><button class="btn go" onclick="pk(S.av,1)">Mulai petualangan!</button></div>`}
+function pk(e,g){S.av=e;S.nm=$('#nm').value;S.tm=$('#tm').checked;g?map():start()}
+function map(){clearInterval(T);const d=S.done,it=[['🌴','Lembah Pilihan Ganda','20 soal · 3 nyawa'],['💎','Goa Isian Singkat','10 soal · buka peti'],['🏰','Kastil Bos Uraian','5 soal bertahap']];
+A.innerHTML=`<div class="card top"><span class="avb">${S.av}</span><div><b>Halo, ${esc(S.nm||'Petualang')}!</b><br><span class="mut">Taklukkan 3 pulau untuk jadi Juara Angka.</span></div></div>`+it.map((p,i)=>{const lk=i&&!d[i-1];return `<button class="isl i${i} ${lk?'lock':''}" ${lk?'disabled':''} onclick="go(${i})"><span class="ie">${lk?'🔒':p[0]}</span><span><b>${p[1]}</b><br><small>${p[2]}${d[i]?' · ✅ '+pct(i)+'%':''}</small></span></button>`+(i<2?'<div class="trail">• • •</div>':'')}).join('')+(d.some(x=>x)?`<button class="btn go" onclick="report()">📜 Lihat Rapor &amp; Kunci</button>`:'')+`<button class="lnk" onclick="start()">Ganti penjelajah</button>`}
+function go(i){IDS[i].forEach(id=>delete S.L[id]);if(i==0){S.s={i:0,h:3};n1()}else ty(i,0)}
+// Pulau 1
+function n1(){const s=S.s,it=I1[s.i];clearInterval(T);
+A.innerHTML=`<div class="card"><div class="hd"><span>${heart(s.h)}</span><span>Soal ${s.i+1}/20</span></div><div class="bar"><i style="width:${s.i*5}%"></i></div>${S.tm?'<div class="tbar"><i id="tb" style="width:100%"></i></div>':''}<p class="q">${it.q}</p>${it.f?FIG[it.f]():''}${it.o.map((o,j)=>`<button class="btn opt" onclick="a1(${j})">${'ABCD'[j]}. ${o}</button>`).join('')}<div id="fb"></div></div>`;
+if(S.tm){let t=300;T=setInterval(()=>{t--;$('#tb').style.width=t/3+'%';if(!t)a1(-1)},100)}}
+function a1(j){clearInterval(T);const s=S.s,it=I1[s.i],r=j==it.k;
+document.querySelectorAll('.opt').forEach((b,x)=>{b.disabled=1;if(x==it.k)b.classList.add('ok');else if(x==j)b.classList.add('bad')});
+const key='ABCD'[it.k]+'. '+it.o[it.k];S.L[it.id]={ok:r,g:j<0?'(waktu habis)':'ABCD'[j]+'. '+it.o[j],a:key,e:it.e,q:it.q};
+let msg='🎉 Benar!';if(r)snd('ok');else{snd('bad');s.h--;msg=j<0?'⏰ Waktu habis!':'😅 Belum tepat.';if(!s.h){s.h=3;msg+=' Hatimu habis, tapi sudah diisi ulang 💖'}}
+$('.hd span').innerHTML=heart(s.h);$('#fb').innerHTML=fbk(msg,key,it.e,s.i<19?'S.s.i++;n1()':'fin(0)')}
+// Pulau 2 & 3
+function ty(isl,i){S.t=0;const arr=isl==1?I2:I3,it=arr[i];
+A.innerHTML=`<div class="card"><div class="hd"><span>${it.h}</span><span>${i+1}/${arr.length}</span></div><div class="bar"><i style="width:${i/arr.length*100}%"></i></div>${isl==1?'<div class="chest" id="ch">🧰</div>':`<div class="boss"><span id="bs">🐉</span><div class="tbar hp"><i style="width:${100-i/arr.length*100}%"></i></div></div>`}${it.s?`<p class="story">${it.s}</p>`:''}${it.f?FIG[it.f]():''}<p class="q">${it.q}</p>${it.ch?it.ch.map(c=>`<button class="btn opt lk" data-v="${c}" onclick="ck(${isl},${i},this.dataset.v)">${c}</button>`).join(''):`<input type="text" id="in" class="lk" autocomplete="off" placeholder="Ketik jawabanmu" onkeydown="if(event.key=='Enter')ck(${isl},${i},this.value)"><button class="btn go lk" onclick="ck(${isl},${i},$('#in').value)">Periksa ✔</button>`}<div id="fb"></div></div>`;
+if($('#in'))$('#in').focus()}
+function ck(isl,i,v){const arr=isl==1?I2:I3,it=arr[i],r=ok(it,v);
+if(!r&&++S.t<2){snd('bad');if(it.ch)document.querySelectorAll('.opt').forEach(b=>{if(b.dataset.v==v){b.disabled=1;b.classList.add('bad')}});else{const f=$('#in');f.classList.remove('shake');void f.offsetWidth;f.classList.add('shake');f.focus()}$('#fb').innerHTML='<div class="fb"><b>🤔 Belum tepat. Coba sekali lagi!</b></div>';return}
+document.querySelectorAll('.lk').forEach(b=>b.disabled=1);
+if(it.ch)document.querySelectorAll('.opt').forEach(b=>{if(b.dataset.v==it.a)b.classList.add('ok')});
+S.L[it.id]={ok:r,g:v||'(kosong)',a:it.a,e:it.e,q:it.q};snd(r?'ok':'bad');
+if(isl==1)$('#ch').textContent=r?'💰':'🪨';else $('#bs').textContent=r?'💥':'🐉';
+$('#fb').innerHTML=fbk(r?'🎉 Benar!':'😅 Belum tepat.',esc(it.a),it.e,i<arr.length-1?`ty(${isl},${i+1})`:`fin(${isl})`)}
+function fin(i){clearInterval(T);S.done[i]=1;snd('win');confetti();const p=pct(i),all=S.done.every(x=>x);
+A.innerHTML=`<div class="card c"><div class="big">${['🌴','💎','🏰'][i]}</div><h2>Pulau selesai!</h2><div class="star">${stars(p)}</div><p>Skormu ${p}%. ${all?'Kamu sudah menaklukkan semua pulau!':'Pulau berikutnya sudah terbuka.'}</p><button class="btn go" onclick="map()">🗺️ Kembali ke peta</button>${all?'<button class="btn alt" onclick="report()">📜 Rapor Akhir</button>':''}</div>`}
+function report(){const all=IDS.flat(),tot=all.length,n=all.filter(id=>S.L[id]&&S.L[id].ok).length;
+A.innerHTML=`<div class="card c"><div class="big">${S.av}</div><h2>Rapor ${esc(S.nm||'Petualang')}</h2><div class="star">${stars(Math.round(n/tot*100))}</div><p>Benar ${n} dari ${tot} jawaban. Ketuk soal untuk melihat kunci &amp; pembahasan.</p></div>`+['Pulau 1 · Lembah Pilihan Ganda','Pulau 2 · Goa Isian Singkat','Pulau 3 · Kastil Bos Uraian'].map((t,i)=>`<h3>${t} ${S.done[i]?'· '+pct(i)+'%':'(belum dimainkan)'}</h3>`+IDS[i].map(id=>{const l=S.L[id];return l?`<details class="rp ${l.ok?'g':'b'}"><summary>${l.ok?'✅':'❌'} ${id}. ${l.q}</summary><div>Jawabanmu: <b>${esc(l.g)}</b><br>Kunci: <b>${esc(l.a)}</b><br>${l.e}</div></details>`:''}).join('')).join('')+`<button class="btn go" onclick="map()">🗺️ Kembali ke peta</button>`}
+start();
+</script></body></html>
